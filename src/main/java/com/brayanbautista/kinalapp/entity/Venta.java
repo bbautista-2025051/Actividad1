@@ -14,8 +14,8 @@ public class Venta {
     @Column(name = "codigo_venta")
     private int CodigoVenta;
     @Column
-    private LocalDate FechaVenta;
-    @Column
+    private Long FechaVenta;
+    @Column(precision = 10, scale = 2)
     private BigDecimal total;
     @Column
     private int Estado;
@@ -31,7 +31,7 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(int codigoVenta, LocalDate fechaVenta, BigDecimal total, int estado, Cliente cliente, Usuario usuario) {
+    public Venta(int codigoVenta, Long fechaVenta, BigDecimal total, int estado, Cliente cliente, Usuario usuario) {
         CodigoVenta = codigoVenta;
         FechaVenta = fechaVenta;
         this.total = total;
@@ -48,11 +48,11 @@ public class Venta {
         CodigoVenta = codigoVenta;
     }
 
-    public LocalDate getFechaVenta() {
+    public Long getFechaVenta() {
         return FechaVenta;
     }
 
-    public void setFechaVenta(LocalDate fechaVenta) {
+    public void setFechaVenta(Long fechaVenta) {
         FechaVenta = fechaVenta;
     }
 
