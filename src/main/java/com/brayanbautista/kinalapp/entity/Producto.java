@@ -1,76 +1,51 @@
 package com.brayanbautista.kinalapp.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
-@Table(name="Productos")
+@Table(name = "productos")
 public class Producto {
+
     @Id
-    @Column(name="codigo_producto")
-    private int CodigoProducto;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "codigo_producto")
+    private Long codigoProducto;
+
     @Column
-    private String NombreProducto;
+    private String nombreProducto;
+
     @Column(precision = 10, scale = 2)
     private BigDecimal precio;
-    @Column
+
     private int stock;
-    @Column
+
     private int estado;
 
-    public Producto() {
-    }
+    @OneToMany(mappedBy = "producto")
+    private List<DetalleVenta> detallesVenta;
 
-    public Producto(int codigoProducto, String nombreProducto, BigDecimal precio, int stock, int estado) {
-        CodigoProducto = codigoProducto;
-        NombreProducto = nombreProducto;
+    public Producto() {}
+
+    public Producto(String nombreProducto, BigDecimal precio, int stock, int estado) {
+        this.nombreProducto = nombreProducto;
         this.precio = precio;
         this.stock = stock;
         this.estado = estado;
     }
 
-    public int getCodigoProducto() {
-        return CodigoProducto;
-    }
-
-    public void setCodigoProducto(int codigoProducto) {
-        CodigoProducto = codigoProducto;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public String getNombreProducto() {
-        return NombreProducto;
-    }
-
-    public void setNombreProducto(String nombreProducto) {
-        NombreProducto = nombreProducto;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
+    // Getters y Setters
+    public Long getCodigoProducto() { return codigoProducto; }
+    public void setCodigoProducto(Long codigoProducto) { this.codigoProducto = codigoProducto; }
+    public String getNombreProducto() { return nombreProducto; }
+    public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
+    public BigDecimal getPrecio() { return precio; }
+    public void setPrecio(BigDecimal precio) { this.precio = precio; }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
+    public int getEstado() { return estado; }
+    public void setEstado(int estado) { this.estado = estado; }
+    public List<DetalleVenta> getDetallesVenta() { return detallesVenta; }
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) { this.detallesVenta = detallesVenta; }
 }
