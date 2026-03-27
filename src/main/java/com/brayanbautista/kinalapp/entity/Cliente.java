@@ -11,7 +11,7 @@ public class Cliente {
 
     @Id
     @Column(name = "dpi_cliente")
-    private int DPICliente;
+    private String DPICliente;
     @Column
     private String nombreCliente;
     @Column
@@ -24,7 +24,7 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(int DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
+    public Cliente(String DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
         this.DPICliente = DPICliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
@@ -32,11 +32,11 @@ public class Cliente {
         this.estado = estado;
     }
 
-    public int getDPICliente() {
+    public String getDPICliente() {
         return DPICliente;
     }
 
-    public void setDPICliente(int DPICliente) {
+    public void setDPICliente(String DPICliente) {
         this.DPICliente = DPICliente;
     }
 
