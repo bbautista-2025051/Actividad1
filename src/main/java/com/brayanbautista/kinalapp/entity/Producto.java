@@ -16,7 +16,7 @@ public class Producto {
     private int CodigoProducto;
     @Column
     private String NombreProducto;
-    @Column
+    @Column(precision = 10, scale = 2)
     private BigDecimal precio;
     @Column
     private int stock;
