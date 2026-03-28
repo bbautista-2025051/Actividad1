@@ -82,12 +82,14 @@ Ejemplo application.properties:
 properties
 spring.datasource.url=jdbc:mysql://localhost:3306/kinalapp_db?useSSL=false&serverTimezone=UTC
 spring.datasource.username=root
-spring.datasource.password=tu_contraseña
+spring.datasource.password=GAMSTERfredy1
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+server.port=8081   # Puerto configurado para la aplicación
 Nota: ddl-auto=update creará las tablas automáticamente si no existen. En producción se recomienda usar validate o herramientas de migración.
 
 Variables de Entorno
@@ -95,8 +97,7 @@ El proyecto utiliza el archivo application.properties para configurar el secreto
 
 properties
 jwt.secret=miClaveSecretaSuperSegura1234567890
-jwt.expiration=86400000  # 24 horas en milisegundos
-Recomendación: No subas secretos reales al repositorio. Usa variables de entorno en producción.
+jwt.expiration=86400000  
 
 Ejecución de la Aplicación
 Clona el repositorio:
@@ -108,7 +109,7 @@ Compila y ejecuta con Maven:
 
 bash
 mvn clean spring-boot:run
-La aplicación se iniciará en http://localhost:8080.
+La aplicación se iniciará en http://localhost:8081.
 
 Estructura del Proyecto
 text
@@ -267,7 +268,7 @@ Importar colección: Crea una colección de Postman con todas las rutas.
 
 Autenticación:
 
-Realiza POST a http://localhost:8080/auth/login con un usuario válido.
+Realiza POST a http://localhost:8081/auth/login con un usuario válido.
 
 Copia el token de la respuesta.
 
@@ -306,12 +307,6 @@ Diagrama de clases: Se recomienda generar un diagrama con IntelliJ o herramienta
 
 Próximas mejoras: Implementar cálculo automático del total de venta a partir de detalles, agregar paginación y filtros avanzados.
 
-Contribuciones
-Para contribuir al proyecto, sigue el flujo de Git:
-
-Crea una rama: git checkout -b feature/nueva-funcionalidad
-
-Realiza cambios y commit: git commit -m "feat: descripción"
 
 Sube la rama: git push origin feature/nueva-funcionalidad
 
