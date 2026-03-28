@@ -13,14 +13,16 @@ public class Producto {
     @Column(name = "codigo_producto")
     private Long codigoProducto;
 
-    @Column
+    @Column(nullable = false)
     private String nombreProducto;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2,nullable = false)
     private BigDecimal precio;
 
+    @Column(nullable = false)
     private int stock;
 
+    @Column(nullable = false)
     private int estado;
 
     @OneToMany(mappedBy = "producto")
@@ -35,17 +37,51 @@ public class Producto {
         this.estado = estado;
     }
 
-    // Getters y Setters
-    public Long getCodigoProducto() { return codigoProducto; }
-    public void setCodigoProducto(Long codigoProducto) { this.codigoProducto = codigoProducto; }
-    public String getNombreProducto() { return nombreProducto; }
-    public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
-    public BigDecimal getPrecio() { return precio; }
-    public void setPrecio(BigDecimal precio) { this.precio = precio; }
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
-    public int getEstado() { return estado; }
-    public void setEstado(int estado) { this.estado = estado; }
-    public List<DetalleVenta> getDetallesVenta() { return detallesVenta; }
-    public void setDetallesVenta(List<DetalleVenta> detallesVenta) { this.detallesVenta = detallesVenta; }
+    public Long getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(Long codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
+    public List<DetalleVenta> getDetallesVenta() {
+        return detallesVenta;
+    }
+
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
+        this.detallesVenta = detallesVenta;
+    }
 }
