@@ -14,7 +14,6 @@ public class ClienteService implements IClientesService {
 
     private final ClienteRepository clienteRepository;
 
-    // Inyección de dependencias por constructor (BUENA PRÁCTICA)
     public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
@@ -25,20 +24,16 @@ public class ClienteService implements IClientesService {
         return clienteRepository.findAll();
     }
 
-
     @Override
     public Cliente guardar(Cliente cliente) {
-
         validarCliente(cliente);
 
-        // Si no se envía estado, lo ponemos activo por defecto
         if (cliente.getEstado() != 0 && cliente.getEstado() != 1) {
             cliente.setEstado(1);
         }
 
         return clienteRepository.save(cliente);
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -48,26 +43,26 @@ public class ClienteService implements IClientesService {
 
     @Override
     public Cliente actualizar(String dpi, Cliente cliente) {
-
         if (!clienteRepository.existsById(dpi)) {
             throw new RuntimeException("Cliente no se encontró con DPI: " + dpi);
         }
 
-        // Usamos el DPI de la URL por seguridad
         cliente.setDPICliente(dpi);
-
         validarCliente(cliente);
+
+        // Normalizar estado
+        if (cliente.getEstado() != 0 && cliente.getEstado() != 1) {
+            cliente.setEstado(1);
+        }
 
         return clienteRepository.save(cliente);
     }
 
     @Override
     public void eliminar(String dpi) {
-
         if (!clienteRepository.existsById(dpi)) {
             throw new RuntimeException("El cliente no se encontró con el DPI: " + dpi);
         }
-
         clienteRepository.deleteById(dpi);
     }
 
@@ -79,31 +74,26 @@ public class ClienteService implements IClientesService {
 
     @Override
     @Transactional(readOnly = true)
-    //Este metodo solo lee datos
     public List<Cliente> obtenerPorEstado(int estado) {
-    //devuelve una lista de los objetos de Cliente
-    //Recibe un entero
         if (estado != 0 && estado != 1) {
             throw new IllegalArgumentException("Solo puede ser 1 y 0");
         }
-
         return clienteRepository.findByEstado(estado);
-        //consulta al repository
     }
 
-
     private void validarCliente(Cliente cliente) {
-
         if (cliente.getDPICliente() == null || cliente.getDPICliente().trim().isEmpty()) {
             throw new IllegalArgumentException("El DPI es un dato obligatorio");
         }
-
         if (cliente.getNombreCliente() == null || cliente.getNombreCliente().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre es un dato obligatorio");
         }
-
         if (cliente.getApellidoCliente() == null || cliente.getApellidoCliente().trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido es un dato obligatorio");
+        }
+        // NUEVA VALIDACIÓN
+        if (cliente.getDireccion() == null || cliente.getDireccion().trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección es obligatoria");
         }
     }
 }
