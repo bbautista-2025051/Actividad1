@@ -5,6 +5,7 @@ import com.brayanbautista.kinalapp.service.IUsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
         try {
-            if (usuarioService.existePorId(id)) {
+            if (!usuarioService.existePorId(id)) {
                 return ResponseEntity.notFound().build();
             }
             Usuario actualizado = usuarioService.actualizar(id, usuario);
@@ -57,7 +58,7 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         try {
-            if (usuarioService.existePorId(id)) {
+            if (!usuarioService.existePorId(id)) {
                 return ResponseEntity.notFound().build();
             }
             usuarioService.eliminar(id);
@@ -70,7 +71,7 @@ public class UsuarioController {
     @GetMapping("/estado/{valor}")
     public ResponseEntity<List<Usuario>> listarPorEstado(@PathVariable int valor) {
         try {
-            return ResponseEntity.ok(usuarioService.     obtenerPorEstado(valor));
+            return ResponseEntity.ok(usuarioService.obtenerPorEstado(valor));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
