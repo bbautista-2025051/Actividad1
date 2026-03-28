@@ -2,8 +2,10 @@ package com.brayanbautista.kinalapp.service;
 
 import com.brayanbautista.kinalapp.entity.Usuario;
 import com.brayanbautista.kinalapp.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -27,19 +31,33 @@ public class UsuarioService implements IUsuarioService {
     public Usuario guardar(Usuario usuario) {
         validarUsuario(usuario);
         if (usuario.getEstado() != 0 && usuario.getEstado() != 1) {
-            usuario.setEstado(1); // Activo por defecto
+            usuario.setEstado(1);
         }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 
     @Override
     public Usuario actualizar(Long id, Usuario usuario) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con ID: " + id);
-        }
-        usuario.setCodigoUsuario(id);
-        validarUsuario(usuario);
-        return usuarioRepository.save(usuario);
+        return usuarioRepository.findById(id).map(userExistente -> {
+            userExistente.setUsername(usuario.getUsername());
+            userExistente.setEmail(usuario.getEmail());
+            userExistente.setRol(usuario.getRol());
+
+            // Normalizar estado
+            int estado = usuario.getEstado();
+            if (estado != 0 && estado != 1) {
+                estado = 1;
+            }
+            userExistente.setEstado(estado);
+
+            if (usuario.getPassword() != null && !usuario.getPassword().isEmpty() &&
+                    !usuario.getPassword().equals(userExistente.getPassword())) {
+                userExistente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+            }
+
+            return usuarioRepository.save(userExistente);
+        }).orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
     }
 
     @Override
@@ -57,29 +75,19 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean existePorId(Long id) {
-        return !usuarioRepository.existsById(id);
+        return usuarioRepository.existsById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Usuario> obtenerPorEstado(int estado) {
-        if (estado != 0 && estado != 1) {
-            throw new IllegalArgumentException("Estado inválido, debe ser 0 o 1");
-        }
         return usuarioRepository.findByEstado(estado);
     }
 
     private void validarUsuario(Usuario usuario) {
-        if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
+        if (usuario.getUsername() == null || usuario.getUsername().isEmpty()) {
             throw new IllegalArgumentException("El nombre de usuario es obligatorio");
         }
-        if (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()) {
-            throw new IllegalArgumentException("La contraseña es obligatoria");
-        }
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("El email es obligatorio");
-        }
+        // Opcional: validar email con expresión regular
     }
 }
