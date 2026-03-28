@@ -1,5 +1,6 @@
 package com.brayanbautista.kinalapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -12,20 +13,22 @@ public class DetalleVenta {
     @Column(name = "codigo_detalle_venta")
     private Long codigoDetalleVenta;
 
+    @Column(nullable = false)
     private int cantidad;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal precioUnitario;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal subtotal;
 
     @ManyToOne
-    @JoinColumn(name = "Productos_codigo_producto", referencedColumnName = "codigo_producto")
+    @JoinColumn(name = "Productos_codigo_producto", referencedColumnName = "codigo_producto", nullable = false)
     private Producto producto;
 
     @ManyToOne
-    @JoinColumn(name = "Ventas_codigo_venta", referencedColumnName = "codigo_venta")
+    @JoinColumn(name = "Ventas_codigo_venta", referencedColumnName = "codigo_venta", nullable = false)
+    @JsonBackReference // Evita la recursividad infinita en el JSON
     private Venta venta;
 
     public DetalleVenta() {}
