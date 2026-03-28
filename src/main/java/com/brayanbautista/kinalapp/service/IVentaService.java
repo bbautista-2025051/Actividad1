@@ -1,7 +1,6 @@
 package com.brayanbautista.kinalapp.service;
 
 import com.brayanbautista.kinalapp.entity.Venta;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +12,5 @@ public interface IVentaService {
     void eliminar(Long id);
     boolean existePorId(Long id);
     List<Venta> obtenerPorEstado(int estado);
-    List<Venta> obtenerPorRangoFechas(LocalDate inicio, LocalDate fin);
+    List<Venta> obtenerPorRangoFechas(long inicio, long fin);  // cambio a long
 }
