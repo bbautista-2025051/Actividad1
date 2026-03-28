@@ -4,6 +4,7 @@ import com.brayanbautista.kinalapp.entity.Producto;
 import com.brayanbautista.kinalapp.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,12 @@ public class ProductoService implements IProductoService {
         }
         producto.setCodigoProducto(id);
         validarProducto(producto);
+
+        // Normalizar estado
+        if (producto.getEstado() != 0 && producto.getEstado() != 1) {
+            producto.setEstado(1);
+        }
+
         return productoRepository.save(producto);
     }
 
