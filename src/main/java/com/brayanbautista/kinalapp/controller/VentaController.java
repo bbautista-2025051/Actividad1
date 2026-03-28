@@ -2,11 +2,9 @@ package com.brayanbautista.kinalapp.controller;
 
 import com.brayanbautista.kinalapp.entity.Venta;
 import com.brayanbautista.kinalapp.service.IVentaService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -78,10 +76,11 @@ public class VentaController {
         }
     }
 
+    // Endpoint modificado: recibe dos parámetros long
     @GetMapping("/fechas")
     public ResponseEntity<List<Venta>> listarPorRangoFechas(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+            @RequestParam long inicio,
+            @RequestParam long fin) {
         try {
             return ResponseEntity.ok(ventaService.obtenerPorRangoFechas(inicio, fin));
         } catch (IllegalArgumentException e) {
